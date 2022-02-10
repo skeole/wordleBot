@@ -28,20 +28,27 @@ Gray = []
 Yellow = []
 Green = []
 
-#print(findBestWord(ListOfWords, 3, 2))
-print("stare")
+lastword = "stare"
+#lastword = findBestWord(ListOfWords, 3, 2)
+print(lastword)
 
 run = True
 while run:
-    temp = input("What letters were gray: ").split()
+    #temp = input("What positions were gray: ").split()
+    #for i in temp:
+    #    Gray.append(lastword[int(i)-1])
+    temp = input("What positions were yellow: ").split()
     for i in temp:
-        Gray.append(i)
-    temp = input("What letters were yellow and what positions (ex. \"A 2 D 4\"): ").split()
-    for i in temp:
+        Yellow.append(lastword[int(i)-1])
         Yellow.append(i)
-    temp = input("What letters were green and what positions (ex. \"A 2 D 4\"): ").split()
+    temp = input("What positions were green: ").split()
     for i in temp:
+        Green.append(lastword[int(i)-1])
         Green.append(i)
+    for i in lastword:
+        if (i not in Green) and (i not in Yellow) and (i not in Gray):
+            Gray.append(i)
+
 
     print(Gray)
     print(Yellow)
@@ -73,6 +80,7 @@ while run:
     ListOfWords = temp2
     #print(ListOfWords)
 
-    print(findBestWord(ListOfWords, 3, 2))
+    lastword = findBestWord(ListOfWords, 3, 2)
+    print(lastword)
 
     run = (input("continue? (y for yes, anything else for no): ") == "y")
