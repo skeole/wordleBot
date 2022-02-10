@@ -1,4 +1,5 @@
 import random
+from tqdm import tqdm as tqdm
 
 with open("wordle_accepted_words.txt") as fileInput:
     ListOfWords = list(fileInput)
@@ -45,7 +46,7 @@ def findGrayYellowGreen(word, endword):
     temp.append(green)
     return temp
 
-def findNumberOfGuesses(startword, endword, LOAW):
+def findNumberOfGuesses(startword, endword, LOAW, greenweight, yellowweight):
     word = startword
     numguesses = 1
     if (startword == endword):
@@ -92,7 +93,7 @@ def findNumberOfGuesses(startword, endword, LOAW):
         ListOfWords = temp2
         # print(ListOfWords)
 
-        word = findBestWord(ListOfWords, 3, 2)
+        word = findBestWord(ListOfWords, greenweight, yellowweight)
         run = (word != endword)
     return numguesses
 
@@ -102,12 +103,12 @@ def getRandomElements(List, NumberOfElements):
         list.append(random.choice(List))
     return list
 
-def findAvgNumberOfGuesses(startword, LOAW):
+def findAvgNumberOfGuesses(startword, LOAW, g, y):
     ave = 0.0
-    for i in getRandomElements(LOAW, 1000):
-        ave += findNumberOfGuesses(startword, i, LOAW)
+    for i in tqdm(getRandomElements(LOAW, 1000)):
+        ave += findNumberOfGuesses(startword, i, LOAW, g, y)
     ave = ave / 1000
     return ave
 
-word = "stare"
-print(word, findAvgNumberOfGuesses(word, ListOfWords))
+word = "saine" #crane = 3.685, slate = 3.582, saine = 3.699, stare = 3.642
+print(word, findAvgNumberOfGuesses(word, ListOfWords, 3, 1))
