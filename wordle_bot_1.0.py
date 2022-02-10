@@ -28,8 +28,9 @@ Gray = []
 Yellow = []
 Green = []
 
-lastword = "stare"
-#lastword = findBestWord(ListOfWords, 3, 2)
+g = int(input("how much do you want to weigh greens: "))
+y = int(input("how much do you want to weigh yellows: "))
+lastword = findBestWord(ListOfWords, g, y)
 print(lastword)
 
 run = True
@@ -43,8 +44,9 @@ while run:
         Yellow.append(i)
     temp = input("What positions were green: ").split()
     for i in temp:
-        Green.append(lastword[int(i)-1])
-        Green.append(i)
+        if i not in Green:
+            Green.append(lastword[int(i)-1])
+            Green.append(i)
     for i in lastword:
         if (i not in Green) and (i not in Yellow) and (i not in Gray):
             Gray.append(i)
@@ -80,7 +82,7 @@ while run:
     ListOfWords = temp2
     #print(ListOfWords)
 
-    lastword = findBestWord(ListOfWords, 3, 2)
+    lastword = findBestWord(ListOfWords, g, y)
     print(lastword)
 
     run = (input("continue? (y for yes, anything else for no): ") == "y")
