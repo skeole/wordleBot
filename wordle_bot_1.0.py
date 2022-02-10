@@ -28,9 +28,9 @@ Gray = []
 Yellow = []
 Green = []
 
-g = int(input("how much do you want to weigh greens (recommended 3): "))
+g = int(input("how much do you want to weigh greens (recommended 2): "))
 y = int(input("how much do you want to weigh yellows (recommended 1): "))
-lastword = findBestWord(ListOfWords, g, y)
+lastword = "slate" #findBestWord(ListOfWords, g, y)
 print(lastword)
 
 run = True
