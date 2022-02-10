@@ -110,6 +110,9 @@ def findAvgNumberOfGuesses(startword, LOAW, g, y):
     ave = ave / len(LOAW)
     return ave
 
-word = "crane"
+#for 1/0: crane = 3.733, slate = 6.586, saine = 3.770, stare = 3.753
 #for 3/1: crane = 3.676, slate = 3.605, saine = 3.703, stare = 3.651
-print(word, findAvgNumberOfGuesses(word, ListOfWords, 3, 1))
+#for 2/1: crane = 3.641, slate = 3.600, saine = 3.701, stare = 3.631
+#for 7/4: crane = 3.627, slate = 3.613, saine = 3.698, stare = 3.633
+#for 3/2: crane = 3.626, slate = 3.611, saine = 3.690, stare = 3.632
+#for 1/1: crane = 3.663, slate = 3.631, saine = 3.710, stare = 3.665
