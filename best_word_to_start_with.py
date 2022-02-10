@@ -50,7 +50,7 @@ def findNumberOfGuesses(startword, endword, LOAW, greenweight, yellowweight):
     word = startword
     numguesses = 1
     if (startword == endword):
-        return 0
+        return 1
     Gray = []
     Yellow = []
     Green = []
@@ -105,10 +105,11 @@ def getRandomElements(List, NumberOfElements):
 
 def findAvgNumberOfGuesses(startword, LOAW, g, y):
     ave = 0.0
-    for i in tqdm(getRandomElements(LOAW, 1000)):
+    for i in tqdm(LOAW): #tqdm(getRandomElements(LOAW, 1000)):
         ave += findNumberOfGuesses(startword, i, LOAW, g, y)
-    ave = ave / 1000
+    ave = ave / len(LOAW)
     return ave
 
-word = "saine" #crane = 3.685, slate = 3.582, saine = 3.699, stare = 3.642
+word = "crane"
+#for 3/1: crane = 3.676, slate = 3.605, saine = 3.703, stare = 3.651
 print(word, findAvgNumberOfGuesses(word, ListOfWords, 3, 1))
