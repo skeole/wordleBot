@@ -1,7 +1,16 @@
+#uses all acceptable answers
+import json
+
 with open("wordle_accepted_words.txt") as fileInput:
     ListOfWords = list(fileInput)
 for i in range(len(ListOfWords)):
-    ListOfWords[i] = ListOfWords[i].strip()
+    ListOfWords[i] = ListOfWords[i].strip() #accepted answers
+
+with open("wordle_accepted_guesses.json") as fileInput:
+    ListOfGuesses = json.load(fileInput) #accepted guesses
+
+for i in ListOfWords:
+    ListOfGuesses.append(i)
 
 def findScore(word, ListOfAllWords, greenweight, yellowweight):
     score = 0
@@ -15,11 +24,11 @@ def findScore(word, ListOfAllWords, greenweight, yellowweight):
                 score += yellowweight
     return (score/len(ListOfAllWords))
 
-def findBestWord(ListOfAllWords, greenweight, yellowweight):
+def findBestWord(ListOfAllGuesses, ListOfAllWords, greenweight, yellowweight):
     maxScore = 0.0
     bestWord = ""
-    for i in ListOfAllWords:
-        if findScore(i, ListOfAllWords, greenweight, yellowweight) >= maxScore:
+    for i in ListOfAllGuesses:
+        if findScore(i, ListOfAllWords, greenweight, yellowweight) > maxScore:
             maxScore = findScore(i, ListOfAllWords, greenweight, yellowweight)
             bestWord = i
     return(bestWord)
@@ -35,9 +44,6 @@ print(lastword)
 
 run = True
 while run:
-    #temp = input("What positions were gray: ").split()
-    #for i in temp:
-    #    Gray.append(lastword[int(i)-1])
     temp = input("What positions were yellow: ").split()
     for i in temp:
         Yellow.append(lastword[int(i)-1])
@@ -51,7 +57,6 @@ while run:
         if (i not in Green) and (i not in Yellow) and (i not in Gray):
             Gray.append(i)
 
-
     print(Gray)
     print(Yellow)
     print(Green)
@@ -63,7 +68,8 @@ while run:
     Gray = temp
 
     temp2 = []
-    for word in ListOfWords:
+    temp3 = []
+    for word in ListOfGuesses:
         temp = True
         for i in range(int(len(Green)/2)):
             if word[int(Green[2*i+1])-1] != Green[2*i]:
@@ -78,11 +84,13 @@ while run:
                     temp = False
         if temp:
             temp2.append(word)
+            if word in ListOfWords:
+                temp3.append(word)
 
-    ListOfWords = temp2
-    #print(ListOfWords)
+    ListOfGuesses = temp2
+    ListOfWords = temp3
 
-    lastword = findBestWord(ListOfWords, g, y)
+    lastword = findBestWord(ListOfGuesses, ListOfWords, g, y)
     print(lastword)
 
     run = (input("continue? (y for yes, anything else for no): ") == "y")

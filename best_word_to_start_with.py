@@ -110,9 +110,32 @@ def findAvgNumberOfGuesses(startword, LOAW, g, y):
     ave = ave / len(LOAW)
     return ave
 
+def findHowManyItFails(startword, LOAW, g, y, maxguesses):
+    print(startword)
+    count = 0
+    listOfFails = []
+    for i in tqdm(LOAW): #tqdm(getRandomElements(LOAW, 1000)):
+        if (findNumberOfGuesses(startword, i, LOAW, g, y) > maxguesses):
+            count += 1
+            listOfFails.append(i)
+    print(listOfFails)
+    return count
+
 #for 1/0: crane = 3.733, slate = 6.586, saine = 3.770, stare = 3.753
 #for 3/1: crane = 3.676, slate = 3.605, saine = 3.703, stare = 3.651
 #for 2/1: crane = 3.641, slate = 3.600, saine = 3.701, stare = 3.631
 #for 7/4: crane = 3.627, slate = 3.613, saine = 3.698, stare = 3.633
 #for 3/2: crane = 3.626, slate = 3.611, saine = 3.690, stare = 3.632
 #for 1/1: crane = 3.663, slate = 3.631, saine = 3.710, stare = 3.665
+
+#of times each word fails at 2/1:
+    #crane: 13; slate: 11; saine: 18; stare: 16
+
+word = "crane"
+print(findHowManyItFails(word, ListOfWords, 2, 1, 6))
+word = "slate"
+print(findHowManyItFails(word, ListOfWords, 2, 1, 6))
+word = "saine"
+print(findHowManyItFails(word, ListOfWords, 2, 1, 6))
+word = "stare"
+print(findHowManyItFails(word, ListOfWords, 2, 1, 6))
