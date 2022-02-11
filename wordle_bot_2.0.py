@@ -101,6 +101,8 @@ while run:
     bestanswerableword = findBestWord(ListOfGuesses, ListOfWords, g, y)[1]
     print("best word to guess is: " + bestguessableword)
     print("best answerable word is: " + bestanswerableword)
+    if (input("do you want to see all possible answers? y/n: ") == "y"):
+        print(ListOfWords)
     lastword = input("what word will you guess: ")
 
     run = (input("continue? (y for yes, anything else for no): ") == "y")
