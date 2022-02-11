@@ -121,7 +121,7 @@ def findHowManyItFails(startword, LOAW, g, y, maxguesses):
     print(listOfFails)
     return count
 
-#for 1/0: crane = 3.733, slate = 6.586, saine = 3.770, stare = 3.753
+#for 1/0: crane = 3.733, slate = 3.686, saine = 3.770, stare = 3.753
 #for 3/1: crane = 3.676, slate = 3.605, saine = 3.703, stare = 3.651
 #for 2/1: crane = 3.641, slate = 3.600, saine = 3.701, stare = 3.631
 #for 7/4: crane = 3.627, slate = 3.613, saine = 3.698, stare = 3.633
@@ -131,11 +131,10 @@ def findHowManyItFails(startword, LOAW, g, y, maxguesses):
 #of times each word fails at 2/1:
     #crane: 13; slate: 11; saine: 18; stare: 16
 
+#special words:
+    #soare, 2/1: 3.724 guesses, 21 fails
+    #saree, 1/0: 3.957 guesses, 22 fails
+    #oater, 1/1: 3.736 guesses, 29 fails
+
 word = "crane"
-print(findHowManyItFails(word, ListOfWords, 2, 1, 6))
-word = "slate"
-print(findHowManyItFails(word, ListOfWords, 2, 1, 6))
-word = "saine"
-print(findHowManyItFails(word, ListOfWords, 2, 1, 6))
-word = "stare"
-print(findHowManyItFails(word, ListOfWords, 2, 1, 6))
+print(findAvgNumberOfGuesses(word, ListOfWords, 1, 0))

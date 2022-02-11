@@ -39,7 +39,8 @@ Green = []
 
 g = int(input("how much do you want to weigh greens (recommended 2): "))
 y = int(input("how much do you want to weigh yellows (recommended 1): "))
-lastword = input("what word do you want to start with (recommended \"slate\"): ")
+lastword = input("what word do you want to start with (recommended: "
+                 "\"oater\", \"soare\", or \"saree\"): ")
 print(lastword)
 
 run = True
