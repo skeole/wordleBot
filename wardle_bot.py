@@ -1,7 +1,15 @@
 import json
 
+with open("wordle_accepted_words.txt") as fileInput:
+    temp = list(fileInput)
+for i in range(len(temp)):
+    temp[i] = temp[i].strip()  # accepted answers
+
 with open("wordle_accepted_guesses.json") as fileInput:
     ListOfWords = json.load(fileInput) #accepted guesses
+
+for i in temp:
+    ListOfWords.append(i)
 
 #pretty sure only difference is that you can do anything
 
@@ -79,9 +87,11 @@ while run:
             temp2.append(word)
 
     ListOfWords = temp2
-    #print(ListOfWords)
 
-    lastword = findBestWord(ListOfWords, g, y)
-    print(lastword)
+    bestguessableword = findBestWord(ListOfWords, g, y)
+    print("best word to guess is: " + bestguessableword)
+    if (input("do you want to see all possible answers? y/n: ") == "y"):
+        print(ListOfWords)
+    lastword = input("what word will you guess: ")
 
     run = (input("continue? (y for yes, anything else for no): ") == "y")
