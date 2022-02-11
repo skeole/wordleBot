@@ -27,11 +27,17 @@ def findScore(word, ListOfAllWords, greenweight, yellowweight):
 def findBestWord(ListOfAllGuesses, ListOfAllWords, greenweight, yellowweight):
     maxScore = 0.0
     bestWord = ""
+    bestWord2 = ""
     for i in ListOfAllGuesses:
         if findScore(i, ListOfAllWords, greenweight, yellowweight) > maxScore:
             maxScore = findScore(i, ListOfAllWords, greenweight, yellowweight)
             bestWord = i
-    return(bestWord)
+    maxScore = 0.0
+    for i in ListOfAllWords:
+        if findScore(i, ListOfAllWords, greenweight, yellowweight) > maxScore:
+            maxScore = findScore(i, ListOfAllWords, greenweight, yellowweight)
+            bestWord2 = i
+    return [bestWord, bestWord2]
 
 Gray = []
 Yellow = []
@@ -91,7 +97,10 @@ while run:
     ListOfGuesses = temp2
     ListOfWords = temp3
 
-    lastword = findBestWord(ListOfGuesses, ListOfWords, g, y)
-    print(lastword)
+    bestguessableword = findBestWord(ListOfGuesses, ListOfWords, g, y)[0]
+    bestanswerableword = findBestWord(ListOfGuesses, ListOfWords, g, y)[1]
+    print("best word to guess is: " + bestguessableword)
+    print("best answerable word is: " + bestanswerableword)
+    lastword = input("what word will you guess: ")
 
     run = (input("continue? (y for yes, anything else for no): ") == "y")
