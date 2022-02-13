@@ -1,7 +1,7 @@
-with open("wordle_accepted_words.txt") as fileInput:
-    ListOfWords = list(fileInput)
-for i in range(len(ListOfWords)):
-    ListOfWords[i] = ListOfWords[i].strip()
+import json
+
+with open("wordle_accepted_answers.json") as fileInput:
+    ListOfWords = json.load(fileInput) #accepted answers
 
 def findScore(word, ListOfAllWords, greenweight, yellowweight):
     score = 0

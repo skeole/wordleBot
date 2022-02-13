@@ -1,10 +1,8 @@
 #uses all acceptable answers
 import json
 
-with open("wordle_accepted_words.txt") as fileInput:
-    ListOfWords = list(fileInput)
-for i in range(len(ListOfWords)):
-    ListOfWords[i] = ListOfWords[i].strip() #accepted answers
+with open("wordle_accepted_answers.json") as fileInput:
+    ListOfWords = json.load(fileInput) #accepted answers
 
 with open("wordle_accepted_guesses.json") as fileInput:
     ListOfGuesses = json.load(fileInput) #accepted guesses
