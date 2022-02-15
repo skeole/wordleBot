@@ -1,0 +1,29 @@
+   word    |   MinAfter1   |      MinAfter2
+ --------- | ------------- | ---------------------
+   soare   |               |   14 - 8955  - clipt #word to do if all gray
+   roate   |               |   13 - 8859  - slimy
+   raise   |               |   13 - 10506 - bludy
+   raile   |               |   13 - 8993  - phons
+   reast   |               |   14 - 13409 - doily
+   slate   |               |   14 - 13331 - round
+   crate   |               |   15 - 14976 - lions
+   salet   |               |   14 - 13331 - round
+   irate   |               |   13 - 11042 - holds
+   trace   |               |   15 - 14976 - lions
+   arise   |               |   13 - 10506 - bludy
+   orate   |               |   13 - 8859  - slimy
+   stare   |               |   14 - 13409 - doily
+   carte   |               |   15 - 14976 - lions
+   raine   |               |   13 - 9873  - smolt
+   slane   |               |   13 - 13917 - droit
+   carle   |               |   15 - 12057 - snout
+   roast   |               |   14 - 15500 - clipe
+   torse   |               |   15 - 14796 - plica
+   carse   |               |   15 - 12621 - doilt
+   toile   |               |   13 - 11190 - drusy
+   trone   |               |   13 - 11925 - mails
+   crane   |               |   15 - 18053 - louts
+   slant   |               |   16 - 26927 - decor
+   trice   |               |   15 - 17017 - sloan
+   least   |               |   14 - 13331 - round
+   slart   |               |   15 - 17062 - coign
