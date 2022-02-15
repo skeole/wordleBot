@@ -57,9 +57,9 @@ while run:
             Gray.append(i)
 
 
-    print(Gray)
-    print(Yellow)
-    print(Green)
+    #print(Gray)
+    #print(Yellow)
+    #print(Green)
 
     temp = []
     for element in Gray:

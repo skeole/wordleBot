@@ -1,5 +1,6 @@
 #uses all acceptable answers
 import json
+from tqdm import tqdm as tqdm
 
 with open("wordle_accepted_answers.json") as fileInput:
     ListOfWords = json.load(fileInput) #accepted answers
@@ -9,6 +10,32 @@ with open("wordle_accepted_guesses.json") as fileInput:
 
 for i in ListOfWords:
     ListOfGuesses.append(i)
+
+def wordsThatFit(word, answers, yellows, greens): #grays, greens, yellows = positions
+    grays = []
+    for i in range(1, 6):
+        if (i not in yellows) and (i not in greens):
+            grays.append(i)
+    wordsthatfit = []
+    for i in answers:
+        temp = True
+        temp2 = list(i)
+        for j in greens:
+            if temp:
+                temp = (word[j-1] == temp2[j-1]) #we need all the greens to match
+                temp2[j-1] = 0 #now we remove the letter from the answer for yellows and grays
+        for j in yellows:
+            if temp:
+                temp = (word[j-1] in temp2) and (word[j-1] != temp2[j-1])
+                #we need the yellows to be in the word but also in a different position
+                if temp:
+                    temp2[temp2.index(word[j-1])] = 0 #now we remove the letter
+        for j in grays:
+            if temp:
+                temp = (word[j-1] not in temp2)
+        if temp:
+            wordsthatfit.append(i)
+    return wordsthatfit
 
 def findScore(word, ListOfAllWords, greenweight, yellowweight):
     score = 0
@@ -26,7 +53,7 @@ def findBestWord(ListOfAllGuesses, ListOfAllWords, greenweight, yellowweight):
     maxScore = 0.0
     bestWord = ""
     bestWord2 = ""
-    for i in ListOfAllGuesses:
+    for i in tqdm(ListOfAllGuesses):
         if findScore(i, ListOfAllWords, greenweight, yellowweight) > maxScore:
             maxScore = findScore(i, ListOfAllWords, greenweight, yellowweight)
             bestWord = i
@@ -43,57 +70,28 @@ Green = []
 
 g = int(input("how much do you want to weigh greens (recommended 2): "))
 y = int(input("how much do you want to weigh yellows (recommended 1): "))
-lastword = input("what word do you want to start with (recommended: "
-                 "\"oater\", \"soare\", or \"saree\"): ")
-print(lastword)
+lastword = "saree" #findBestWord(ListOfGuesses, ListOfWords, g, y)
+lastword = input("what word do you want to start with (recommended: \"" + lastword[0] +
+                 "\"): ")
 
 run = True
 while run:
+
+    Gray = []
+    Yellow = []
+    Green = []
     temp = input("What positions were yellow: ").split()
     for i in temp:
-        Yellow.append(lastword[int(i)-1])
-        Yellow.append(i)
+        Yellow.append(int(i))
     temp = input("What positions were green: ").split()
     for i in temp:
-        if i not in Green:
-            Green.append(lastword[int(i)-1])
-            Green.append(i)
-    for i in lastword:
-        if (i not in Green) and (i not in Yellow) and (i not in Gray):
-            Gray.append(i)
+        Green.append(int(i))
+    for i in range(1, 6):
+        if (i not in Green) and (i not in Yellow):
+            Gray.append(int(i))
 
-    print(Gray)
-    print(Yellow)
-    print(Green)
-
-    temp = []
-    for element in Gray:
-        if (element not in Yellow) and (element not in Green):
-            temp.append(element)
-    Gray = temp
-
-    temp2 = []
-    temp3 = []
-    for word in ListOfGuesses:
-        temp = True
-        for i in range(int(len(Green)/2)):
-            if word[int(Green[2*i+1])-1] != Green[2*i]:
-                temp = False
-        if temp:
-            for i in range(int(len(Yellow)/2)):
-                if (Yellow[2*i] not in word) or (word[int(Yellow[2*i+1])-1] == Yellow[2*i]):
-                    temp = False
-        if temp:
-            for i in Gray:
-                if i in word:
-                    temp = False
-        if temp:
-            temp2.append(word)
-            if word in ListOfWords:
-                temp3.append(word)
-
-    ListOfGuesses = temp2
-    ListOfWords = temp3
+    ListOfWords = wordsThatFit(lastword, ListOfWords, Yellow, Green)
+    print(ListOfWords)
 
     bestguessableword = findBestWord(ListOfGuesses, ListOfWords, g, y)[0]
     bestanswerableword = findBestWord(ListOfGuesses, ListOfWords, g, y)[1]
