@@ -79,18 +79,23 @@ def findYellowGreen(guess, target):
 
 def findOptimizedWord(ListOfAllGuesses, ListOfAllWords):
     min = 10000
+    min2 = 10000
     bestWord = ""
     for i in tqdm(ListOfAllGuesses): #go over every possible guess
         temp = 0
+        temp3 = 0
         for j in ListOfAllWords: #go over all the remaining words
             temp2 = findYellowGreen(i, j)
             yellow = temp2[0]
             green = temp2[1]
-            temp = max(temp, len(wordsThatFit(i, ListOfAllWords, yellow, green))) #nash equilib
-        if temp <= min:
+            c = len(wordsThatFit(i, ListOfAllWords, yellow, green))
+            temp = max(temp, c) #nash equilib
+            temp3 += c * c
+        if ((temp == min) and (temp3 < min2)) or (temp < min):
             min = temp
+            min2 = temp3
             bestWord = i
-    return bestWord, min
+    return bestWord, min, min2
 
 g = int(input("how much do you want to weigh greens (recommended 2): "))
 y = int(input("how much do you want to weigh yellows (recommended 1): "))
@@ -104,7 +109,7 @@ elif g/y == 0:
     lastword = ["estro", 0]
 else:
     lastword = findBestWord(ListOfGuesses, ListOfWords, g, y)
-lastword = input("what word do you want to start with (recommended: \"" + lastword[0] + "\"): ")
+lastword = input("what word do you want to start with (recommended: \"" + lastword[0] + "\" or \"raise\"): ")
 
 run = True
 while run:
