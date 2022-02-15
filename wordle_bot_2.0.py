@@ -1,4 +1,3 @@
-#uses all acceptable answers
 import json
 from tqdm import tqdm as tqdm
 
@@ -64,15 +63,48 @@ def findBestWord(ListOfAllGuesses, ListOfAllWords, greenweight, yellowweight):
             bestWord2 = i
     return [bestWord, bestWord2]
 
-Gray = []
-Yellow = []
-Green = []
+def findYellowGreen(guess, target):
+    r = list(target)
+    Green = []
+    Yellow = []
+    for i in range(5):
+        if guess[i] == r[i]:
+            r[i] = 0
+            Green.append(i+1)
+    for i in range(5):
+        if (guess[i] in r) and ((i+1) not in Green):
+            r[r.index(guess[i])] = 0
+            Yellow.append(i+1)
+    return [Yellow, Green]
+
+def findOptimizedWord(ListOfAllGuesses, ListOfAllWords):
+    min = 10000
+    bestWord = ""
+    for i in tqdm(ListOfAllGuesses): #go over every possible guess
+        temp = 0
+        for j in ListOfAllWords: #go over all the remaining words
+            temp2 = findYellowGreen(i, j)
+            yellow = temp2[0]
+            green = temp2[1]
+            temp = max(temp, len(wordsThatFit(i, ListOfAllWords, yellow, green))) #nash equilib
+        if temp <= min:
+            min = temp
+            bestWord = i
+    return bestWord, min
 
 g = int(input("how much do you want to weigh greens (recommended 2): "))
 y = int(input("how much do you want to weigh yellows (recommended 1): "))
-lastword = "saree" #findBestWord(ListOfGuesses, ListOfWords, g, y)
-lastword = input("what word do you want to start with (recommended: \"" + lastword[0] +
-                 "\"): ")
+if y == 0:
+    lastword = ["saree", 0]
+elif g/y == 2:
+    lastword = ["soare", 0]
+elif g/y == 1:
+    lastword = ["oater", 0]
+elif g/y == 0:
+    lastword = ["estro", 0]
+else:
+    lastword = findBestWord(ListOfGuesses, ListOfWords, g, y)
+lastword = input("what word do you want to start with (recommended: \"" + lastword[0] + "\"): ")
 
 run = True
 while run:
@@ -91,14 +123,17 @@ while run:
             Gray.append(int(i))
 
     ListOfWords = wordsThatFit(lastword, ListOfWords, Yellow, Green)
-    print(ListOfWords)
 
-    bestguessableword = findBestWord(ListOfGuesses, ListOfWords, g, y)[0]
-    bestanswerableword = findBestWord(ListOfGuesses, ListOfWords, g, y)[1]
+    temp = findBestWord(ListOfGuesses, ListOfWords, g, y)
+
+    bestguessableword = temp[0]
+    bestanswerableword = temp[1]
     print("best word to guess is: " + bestguessableword)
     print("best answerable word is: " + bestanswerableword)
     if (input("do you want to see all possible answers? y/n: ") == "y"):
         print(ListOfWords)
+    if (input("do you want ur computer to die? y/n: ") == "y"):
+        print(findOptimizedWord(ListOfGuesses, ListOfWords))
     lastword = input("what word will you guess: ")
 
     run = (input("continue? (y for yes, anything else for no): ") == "y")
