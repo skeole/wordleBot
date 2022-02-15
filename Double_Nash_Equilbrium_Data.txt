@@ -1,29 +1,29 @@
    word    |   MinAfter1   |      MinAfter2
  --------- | ------------- | ---------------------
-   soare   |               |   14 - 8955  - clipt #word to do if all gray
-   roate   |               |   13 - 8859  - slimy
-   raise   |               |   13 - 10506 - bludy
-   raile   |               |   13 - 8993  - phons
-   reast   |               |   14 - 13409 - doily
-   slate   |               |   14 - 13331 - round
-   crate   |               |   15 - 14976 - lions
-   salet   |               |   14 - 13331 - round
-   irate   |               |   13 - 11042 - holds
-   trace   |               |   15 - 14976 - lions
-   arise   |               |   13 - 10506 - bludy
-   orate   |               |   13 - 8859  - slimy
-   stare   |               |   14 - 13409 - doily
-   carte   |               |   15 - 14976 - lions
-   raine   |               |   13 - 9873  - smolt
-   slane   |               |   13 - 13917 - droit
-   carle   |               |   15 - 12057 - snout
-   roast   |               |   14 - 15500 - clipe
-   torse   |               |   15 - 14796 - plica
-   carse   |               |   15 - 12621 - doilt
-   toile   |               |   13 - 11190 - drusy
-   trone   |               |   13 - 11925 - mails
-   crane   |               |   15 - 18053 - louts
-   slant   |               |   16 - 26927 - decor
-   trice   |               |   15 - 17017 - sloan
-   least   |               |   14 - 13331 - round
-   slart   |               |   15 - 17062 - coign
+   soare   | 183 15435233  |   14 - 8955  - clipt #word to do if all gray
+   roate   | 195 14614247  |   13 - 8859  - slimy
+   raise   | 168 13819763  |   13 - 10506 - bludy
+   raile   | 173 14045159  |   13 - 8993  - phons
+   reast   | 227 22534889  |   14 - 13409 - doily
+   slate   | 221 22308425  |   14 - 13331 - round
+   crate   | 246 24058175  |   15 - 14976 - lions
+   salet   | 221 21729779  |   14 - 13331 - round
+   irate   | 194 16046657  |   13 - 11042 - holds
+   trace   | 246 24646655  |   15 - 14976 - lions
+   arise   | 168 15454811  |   13 - 10506 - bludy
+   orate   | 195 16125029  |   13 - 8859  - slimy
+   stare   | 227 21510731  |   14 - 13409 - doily
+   carte   | 246 23930441  |   15 - 14976 - lions
+   raine   | 195 17374271  |   13 - 9873  - smolt
+   slane   | 225 23634791  |   13 - 13917 - droit
+   carle   | 249 24771293  |   15 - 12057 - snout
+   roast   | 266 31326929  |   14 - 15500 - clipe
+   torse   | 246 26152205  |   15 - 14796 - plica
+   carse   | 237 24017849  |   15 - 12621 - doilt
+   toile   | 204 21075299  |   13 - 11190 - drusy
+   trone   | 261 27755885  |   13 - 11925 - mails
+   crane   | 263 28291385  |   15 - 18053 - louts
+   slant   | 317 45544655  |   16 - 26927 - decor
+   trice   | 277 33174131  |   15 - 17017 - sloan
+   least   | 221 26701475  |   14 - 13331 - round
+   slart   | 244 32540393  |   15 - 17062 - coign
