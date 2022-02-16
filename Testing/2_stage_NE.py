@@ -1,10 +1,10 @@
 import json
 from tqdm import tqdm as tqdm
 
-with open("wordle_accepted_answers.json") as fileInput:
+with open("../Word_Data/wordle_accepted_answers.json") as fileInput:
     ListOfWords = json.load(fileInput) #accepted answers
 
-with open("wordle_accepted_guesses.json") as fileInput:
+with open("../Word_Data/wordle_accepted_guesses.json") as fileInput:
     ListOfLGuesses = json.load(fileInput) #accepted guesses
 
 for i in ListOfWords:

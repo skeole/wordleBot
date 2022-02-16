@@ -2,7 +2,7 @@ import random
 from tqdm import tqdm as tqdm
 import json
 
-with open("wordle_accepted_answers.json") as fileInput:
+with open("../Word_Data/wordle_accepted_answers.json") as fileInput:
     ListOfWords = json.load(fileInput) #accepted answers
 
 def findScore(word, ListOfAllWords, greenweight, yellowweight):

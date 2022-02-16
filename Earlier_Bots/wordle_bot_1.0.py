@@ -1,15 +1,7 @@
 import json
 
-with open("wordle_accepted_answers.json") as fileInput:
-    temp = json.load(fileInput) #accepted answers
-
-with open("wordle_accepted_guesses.json") as fileInput:
-    ListOfWords = json.load(fileInput) #accepted guesses
-
-for i in temp:
-    ListOfWords.append(i)
-
-#pretty sure only difference is that you can do anything
+with open("../Word_Data/wordle_accepted_answers.json") as fileInput:
+    ListOfWords = json.load(fileInput) #accepted answers
 
 def findScore(word, ListOfAllWords, greenweight, yellowweight):
     score = 0
@@ -43,6 +35,9 @@ print(lastword)
 
 run = True
 while run:
+    #temp = input("What positions were gray: ").split()
+    #for i in temp:
+    #    Gray.append(lastword[int(i)-1])
     temp = input("What positions were yellow: ").split()
     for i in temp:
         Yellow.append(lastword[int(i)-1])
@@ -85,11 +80,9 @@ while run:
             temp2.append(word)
 
     ListOfWords = temp2
+    #print(ListOfWords)
 
-    bestguessableword = findBestWord(ListOfWords, g, y)
-    print("best word to guess is: " + bestguessableword)
-    if (input("do you want to see all possible answers? y/n: ") == "y"):
-        print(ListOfWords)
-    lastword = input("what word will you guess: ")
+    lastword = findBestWord(ListOfWords, g, y)
+    print(lastword)
 
     run = (input("continue? (y for yes, anything else for no): ") == "y")
