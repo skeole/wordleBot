@@ -1,5 +1,4 @@
 import json
-from tqdm import tqdm as tqdm
 
 with open("wordle_accepted_answers.json") as fileInput:
     ListOfWords = json.load(fileInput) #accepted answers
@@ -7,14 +6,40 @@ with open("wordle_accepted_answers.json") as fileInput:
 with open("wordle_accepted_guesses.json") as fileInput:
     ListOfGuesses = json.load(fileInput) #accepted guesses
 
-with open("Bot3BestGuesses.json") as fileInput:
-    ApprovedGuesses = json.load(fileInput)
-
-with open("Bot3GrayAnswers.json") as fileInput:
-    NextApprovedGuesses = json.load(fileInput)
-
 for i in ListOfWords:
     ListOfGuesses.append(i)
+
+def findYellowGreen1(code): #code = 0 to 242
+    GYG = [[], [], []]
+    GYG[int(code/1) % 3].append(1)
+    GYG[int(code/3) % 3].append(2)
+    GYG[int(code/9) % 3].append(3)
+    GYG[int(code/27) % 3].append(4)
+    GYG[int(code/81) % 3].append(5)
+    return GYG
+
+def decodeYellowGreen(yellows, greens):
+    s = 0
+    for i in range(1, 6):
+        if i in yellows:
+            s += 3**(i-1)
+        if i in greens:
+            s += 2 * (3**(i-1))
+    return s
+
+def findYellowGreen(guess, target):
+    r = list(target)
+    Green = []
+    Yellow = []
+    for i in range(5):
+        if guess[i] == r[i]:
+            r[i] = 0
+            Green.append(i+1)
+    for i in range(5):
+        if (guess[i] in r) and ((i+1) not in Green):
+            r[r.index(guess[i])] = 0
+            Yellow.append(i+1)
+    return [Yellow, Green]
 
 def wordsThatFit(word, answers, yellows, greens): #grays, greens, yellows = positions
     grays = []
@@ -42,25 +67,11 @@ def wordsThatFit(word, answers, yellows, greens): #grays, greens, yellows = posi
             wordsthatfit.append(i)
     return wordsthatfit
 
-def findYellowGreen(guess, target):
-    r = list(target)
-    Green = []
-    Yellow = []
-    for i in range(5):
-        if guess[i] == r[i]:
-            r[i] = 0
-            Green.append(i+1)
-    for i in range(5):
-        if (guess[i] in r) and ((i+1) not in Green):
-            r[r.index(guess[i])] = 0
-            Yellow.append(i+1)
-    return [Yellow, Green]
-
 def findOptimizedWord(ListOfAllGuesses, ListOfAllWords):
     min = 10000
     min2 = 10000
     bestWord = ""
-    for i in tqdm(ListOfAllGuesses): #go over every possible guess
+    for i in ListOfAllGuesses: #go over every possible guess
         temp = 0
         temp3 = 0
         for j in ListOfAllWords: #go over all the remaining words
@@ -76,34 +87,8 @@ def findOptimizedWord(ListOfAllGuesses, ListOfAllWords):
             bestWord = i
     return bestWord, min, min2
 
-lastword = input("what word do you want to start with (recommended: \"raise\"): ")
+for i in range(0, 243):
+    temp2 = findYellowGreen1(i)
+    print(decodeYellowGreen(temp2[1], temp2[2]))
 
-run = True
-while run:
-
-    Yellow = []
-    Green = []
-    temp = input("What positions were yellow: ").split()
-    for i in temp:
-        Yellow.append(int(i))
-    temp = input("What positions were green: ").split()
-    for i in temp:
-        Green.append(int(i))
-
-    ListOfWords = wordsThatFit(lastword, ListOfWords, Yellow, Green)
-
-    if len(ListOfWords) == 1:
-        print("the word is " + ListOfWords[0])
-        run = False
-    else:
-        if (lastword in ApprovedGuesses) and (len(Yellow) + len(Green) == 0):
-            temp = [NextApprovedGuesses[ApprovedGuesses.index(lastword)], 13]
-        else:
-            temp = findOptimizedWord(ListOfGuesses, ListOfWords)
-
-        print("best word to guess: " + temp[0] + " (Nash Equilbrium: " + str(temp[1]) + " words remaining after guess)")
-        if (input("do you want to see all possible answers? y/n: ") == "y"):
-            print(ListOfWords)
-        lastword = input("what word will you guess: ")
-
-        run = (input("continue? (y for yes, anything else for no): ") == "y")
+    #findYellowGreen(i)[1] findYellowGreen(i)[2]

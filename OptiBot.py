@@ -7,11 +7,15 @@ with open("wordle_accepted_answers.json") as fileInput:
 with open("wordle_accepted_guesses.json") as fileInput:
     ListOfGuesses = json.load(fileInput) #accepted guesses
 
-with open("Bot3BestGuesses.json") as fileInput:
-    ApprovedGuesses = json.load(fileInput)
+ListOfNextGuesses = []
 
-with open("Bot3GrayAnswers.json") as fileInput:
-    NextApprovedGuesses = json.load(fileInput)
+with open("cheat.txt") as fileInput:
+    file = list(fileInput)
+
+for line in file:
+    C = line.strip()
+    C = C.split()
+    ListOfNextGuesses.append([C[1], C[2]])
 
 for i in ListOfWords:
     ListOfGuesses.append(i)
@@ -76,7 +80,17 @@ def findOptimizedWord(ListOfAllGuesses, ListOfAllWords):
             bestWord = i
     return bestWord, min, min2
 
-lastword = input("what word do you want to start with (recommended: \"raise\"): ")
+def decodeYellowGreen(yellows, greens):
+    s = 0
+    for i in range(1, 6):
+        if i in yellows:
+            s += 3**(i-1)
+        if i in greens:
+            s += 2 * (3**(i-1))
+    return s
+
+lastword = "raise"
+print("starting word: raise")
 
 run = True
 while run:
@@ -95,15 +109,20 @@ while run:
     if len(ListOfWords) == 1:
         print("the word is " + ListOfWords[0])
         run = False
+    elif len(ListOfWords) == 2:
+        print("there are 2 remaining words: \"" + ListOfWords[0] + "\" and \"" + ListOfWords[1] + "\". ")
+        run = False
+    elif lastword == "raise":
+        print("next word: \"" + ListOfNextGuesses[decodeYellowGreen(Yellow, Green)][0] +
+              "\". Nash Equilbrium: " + ListOfNextGuesses[decodeYellowGreen(Yellow, Green)][1] + " words. ")
+        lastword = ListOfNextGuesses[decodeYellowGreen(Yellow, Green)][0]
     else:
-        if (lastword in ApprovedGuesses) and (len(Yellow) + len(Green) == 0):
-            temp = [NextApprovedGuesses[ApprovedGuesses.index(lastword)], 13]
-        else:
-            temp = findOptimizedWord(ListOfGuesses, ListOfWords)
-
-        print("best word to guess: " + temp[0] + " (Nash Equilbrium: " + str(temp[1]) + " words remaining after guess)")
+        temp = findOptimizedWord(ListOfGuesses, ListOfWords)
+        lastword = temp[0]
+        print("next word: \"" + lastword + "\". Nash Equilbrium: " +
+              str(temp[1]) + " words. ")
+    if run:
         if (input("do you want to see all possible answers? y/n: ") == "y"):
             print(ListOfWords)
-        lastword = input("what word will you guess: ")
 
         run = (input("continue? (y for yes, anything else for no): ") == "y")
