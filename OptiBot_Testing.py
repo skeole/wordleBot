@@ -146,8 +146,22 @@ print(len(ListOfFives))
 s = (s / len(ListOfWords))
 
 print(s)
+'''
+raise:
+    average amount of guesses: 3.585313174946004
+    number of words that require 4.5 or 5 guesses: 114
+    number of words that require more than 5: none
+    average amount of time spent per word: <1 second
 
-#average amount of guesses: 3.585313174946004
-#number of words that require 4.5 or 5 guesses: 114
-#number of words that require more than 5: none
-#average amount of time spent per word: 0.5922 seconds
+salet:
+    average amount of guesses: 3.5399568034557234
+    number of words that require 4.5 or 5 guesses: 82
+    number of words that require more than 5: None
+    average amount of time spent per word: <1 second
+
+adieu:
+    average amount of guesses: 3.7293736501079913
+    number of words that require 4.5 or 5 guesses: 212
+    number of words that require more than 5: none
+    average amount of time spent per word: 1 to 2 seconds
+'''

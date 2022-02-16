@@ -88,10 +88,10 @@ def findOptimizedWord(ListOfAllGuesses, ListOfAllWords):
             bestWord = i
     return bestWord, min, min2
 
-guess = "salet" #THIS IS WHAT YOU NEED TO CHANGE
+guess = "adieu" #THIS IS WHAT YOU NEED TO CHANGE
 
 print(guess)
-for i in range(1, 243):
+for i in range(0, 243):
     temp2 = findYellowGreen1(i)
     temp = wordsThatFit(guess, ListOfWords, temp2[1], temp2[2])
     temp2 = findOptimizedWord(ListOfGuesses, temp)
