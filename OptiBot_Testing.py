@@ -64,7 +64,7 @@ def findOptimizedWord(ListOfAllGuesses, ListOfAllWords):
     min = 10000
     min2 = 10000
     bestWord = ""
-    for i in tqdm(ListOfAllGuesses): #go over every possible guess
+    for i in ListOfAllGuesses: #go over every possible guess
         temp = 0
         temp3 = 0
         for j in ListOfAllWords: #go over all the remaining words
@@ -89,38 +89,60 @@ def decodeYellowGreen(yellows, greens):
             s += 2 * (3**(i-1))
     return s
 
-lastword = "raise"
-print("starting word: raise")
+def findNumGuesses(target, ListOfGuesses, ListOfWords):
+    lastword = "raise"
+    run = True
+    numGuesses = 1.0
+    if target == "raise":
+        return 1.0
+    LOW = ListOfWords
+    while run:
+        numGuesses += 1
+        temp0 = findYellowGreen(lastword, target)
+        LOW = wordsThatFit(lastword, LOW, temp0[0], temp0[1])
 
-run = True
-while run:
+        if len(LOW) == 1:
+            run = False
+        elif len(LOW) == 2:
+            numGuesses += 0.5
+            run = False
+        elif lastword == "raise":
+            lastword = ListOfNextGuesses[decodeYellowGreen(temp0[0], temp0[1])][0]
+        else:
+            lastword = findOptimizedWord(ListOfGuesses, LOW)[0]
+        if numGuesses > 10:
+            run = False
+    return numGuesses
 
-    Yellow = []
-    Green = []
-    temp = input("What positions were yellow: ").split()
-    for i in temp:
-        Yellow.append(int(i))
-    temp = input("What positions were green: ").split()
-    for i in temp:
-        Green.append(int(i))
+s = 0.0
+ListOfFailures = []
+ListOfSixes = []
+ListOfFives = []
 
-    ListOfWords = wordsThatFit(lastword, ListOfWords, Yellow, Green)
+for i in tqdm(ListOfWords):
+    t = findNumGuesses(i, ListOfGuesses, ListOfWords)
+    s += t
 
-    if len(ListOfWords) == 1:
-        print("the word is " + ListOfWords[0])
-        run = False
-    elif len(ListOfWords) == 2:
-        print("there are 2 remaining words: \"" + ListOfWords[0] + "\" and \"" + ListOfWords[1] + "\". ")
-        run = False
-    elif lastword == "raise":
-        print("next word: \"" + ListOfNextGuesses[decodeYellowGreen(Yellow, Green)][0] +
-              "\". Nash Equilbrium: " + ListOfNextGuesses[decodeYellowGreen(Yellow, Green)][1] +
-              " words. There are " + str(len(ListOfWords)) + " words left currently. ")
-        lastword = ListOfNextGuesses[decodeYellowGreen(Yellow, Green)][0]
-    else:
-        temp = findOptimizedWord(ListOfGuesses, ListOfWords)
-        lastword = temp[0]
-        print("next word: \"" + lastword + "\". Nash Equilbrium: " + str(temp[1]) +
-              " words. There are " + str(len(ListOfWords)) + " words left currently. ")
-    if run:
-        run = (input("continue? (y for yes, anything else for no): ") == "y")
+    if t > 6:
+        ListOfFailures.append(i)
+    elif t > 5:
+        ListOfSixes.append(i)
+    elif t > 4:
+        ListOfFives.append(i)
+
+print(s)
+print(ListOfFailures)
+print(len(ListOfFailures))
+print(ListOfSixes)
+print(len(ListOfSixes))
+print(ListOfFives)
+print(len(ListOfFives))
+
+s = (s / len(ListOfWords))
+
+print(s)
+
+#average amount of guesses: 3.585313174946004
+#number of words that require 4.5 or 5 guesses: 114
+#number of words that require more than 5: none
+#average amount of time spent per word: 0.5922 seconds
