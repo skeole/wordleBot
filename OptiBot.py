@@ -12,10 +12,15 @@ ListOfNextGuesses = []
 with open("cheat.txt") as fileInput:
     file = list(fileInput)
 
+firstguess = ""
+
 for line in file:
     C = line.strip()
     C = C.split()
-    ListOfNextGuesses.append([C[1], C[2]])
+    if firstguess == "":
+        firstguess = C[0]
+    else:
+        ListOfNextGuesses.append([C[1], C[2]])
 
 for i in ListOfWords:
     ListOfGuesses.append(i)
@@ -89,8 +94,8 @@ def decodeYellowGreen(yellows, greens):
             s += 2 * (3**(i-1))
     return s
 
-lastword = "raise"
-print("starting word: raise")
+lastword = firstguess
+print("starting word: \"" + lastword + "\"")
 
 run = True
 while run:
@@ -112,7 +117,7 @@ while run:
     elif len(ListOfWords) == 2:
         print("there are 2 remaining words: \"" + ListOfWords[0] + "\" and \"" + ListOfWords[1] + "\". ")
         run = False
-    elif lastword == "raise":
+    elif lastword == firstguess:
         print("next word: \"" + ListOfNextGuesses[decodeYellowGreen(Yellow, Green)][0] +
               "\". Nash Equilbrium: " + ListOfNextGuesses[decodeYellowGreen(Yellow, Green)][1] +
               " words. There are " + str(len(ListOfWords)) + " words left currently. ")

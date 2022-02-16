@@ -1,4 +1,5 @@
 import json
+from tqdm import tqdm as tqdm
 
 with open("wordle_accepted_answers.json") as fileInput:
     ListOfWords = json.load(fileInput) #accepted answers
@@ -87,8 +88,11 @@ def findOptimizedWord(ListOfAllGuesses, ListOfAllWords):
             bestWord = i
     return bestWord, min, min2
 
+guess = "raise" #THIS IS WHAT YOU NEED TO CHANGE
+
+print(guess)
 for i in range(0, 243):
     temp2 = findYellowGreen1(i)
-    print(decodeYellowGreen(temp2[1], temp2[2]))
-
-    #findYellowGreen(i)[1] findYellowGreen(i)[2]
+    temp = wordsThatFit(guess, ListOfWords, temp2[1], temp2[2])
+    temp2 = findOptimizedWord(ListOfGuesses, temp)
+    print(i, temp2[0], temp2[1])

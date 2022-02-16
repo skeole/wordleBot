@@ -12,10 +12,15 @@ ListOfNextGuesses = []
 with open("cheat.txt") as fileInput:
     file = list(fileInput)
 
+firstguess = ""
+
 for line in file:
     C = line.strip()
     C = C.split()
-    ListOfNextGuesses.append([C[1], C[2]])
+    if firstguess == "":
+        firstguess = C[0]
+    else:
+        ListOfNextGuesses.append([C[1], C[2]])
 
 for i in ListOfWords:
     ListOfGuesses.append(i)
@@ -90,10 +95,10 @@ def decodeYellowGreen(yellows, greens):
     return s
 
 def findNumGuesses(target, ListOfGuesses, ListOfWords):
-    lastword = "raise"
+    lastword = firstguess
     run = True
     numGuesses = 1.0
-    if target == "raise":
+    if target == firstguess:
         return 1.0
     LOW = ListOfWords
     while run:
@@ -106,7 +111,7 @@ def findNumGuesses(target, ListOfGuesses, ListOfWords):
         elif len(LOW) == 2:
             numGuesses += 0.5
             run = False
-        elif lastword == "raise":
+        elif lastword == firstguess:
             lastword = ListOfNextGuesses[decodeYellowGreen(temp0[0], temp0[1])][0]
         else:
             lastword = findOptimizedWord(ListOfGuesses, LOW)[0]
