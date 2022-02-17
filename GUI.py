@@ -32,6 +32,8 @@ lime = (128, 255, 0)
 
 clock = pygame.time.Clock()
 
+ListOfButtons = []
+
 def text_objects(text, font, color):
     textSurface = font.render(text, True, color) #what the thing renders as
             #(xpos, ypos, xlength, ylength) <------|; default x, y is 0, 0; ylength = font size
@@ -49,9 +51,21 @@ def display_message(text, font_size, x_position, y_position, color, font="futura
 def color_with_opacity(color, opacity):
     return [color[0], color[1], color[2], opacity]
 
-def draw_centered_rectangle(x_center, y_center, width, height, color, surface=gameDisplay, fill=0, border_radius=0):
+def draw_centered_rectangle(x_center, y_center, width, height, color, surface=gameDisplay, fill=0, border_radius=0.0):
     #fill: 0 if fully filled, >1 for line thickness
     pygame.draw.rect(surface, color, [int(x_center - (width/2)), int(y_center - (height/2)), int(width), int(height)], width=int(fill), border_radius=int(border_radius))
+
+def button(message, text_color, x, y, width, height, color, surface=gameDisplay, border_radius=0.0, border=0, border_color=black, border_width=0.0, font="futura", font_size=-1):
+    if border != 0:
+        draw_centered_rectangle(x, y, width+2*border_width, height+2*border_width, border_color, surface=surface, border_radius=border_radius+border_width)
+    draw_centered_rectangle(x, y, width, height, color, surface=surface, border_radius=border_radius)
+    temp = font_size
+    if font_size == -1:
+        temp = height * 3 / 4
+    display_message(message, temp, x, y, text_color, font=font)
+
+def button_data(message, x, y, width, height):
+    return [message, x-width/2, y-height/2, x+width/2, y+height/2]
 
 def game_loop():
     run = True
@@ -66,6 +80,9 @@ def game_loop():
         #must be from ["optima", "georgia", "keyboard", "verdana",
     #                   "arial", "futura", "comicsans", "gillsans"]
     while run:
+
+        ListOfButtons = []
+
         for event in pygame.event.get(): #basically go over every event
                         #this includes, but is not limited to: change in mouse position,
                         #     mouse down/up, keys down/up (and which specific key), etc.
@@ -76,8 +93,10 @@ def game_loop():
                 mouse_pressed = True
             if event.type == pygame.MOUSEBUTTONUP:
                 mouse_pressed = False
-            print(event)
+            #print(event)
 
+        mouse_x, mouse_y = pygame.mouse.get_pos()
+        #print(mouse_x, mouse_y)
         gameDisplay.fill(black) #sets the background to white = (255, 255, 255)
 
         draw_centered_rectangle(17*display_width/80, 40*display_height/60, 8*display_width/80, 8*display_height/60, white, border_radius=display_height/80)
@@ -91,6 +110,15 @@ def game_loop():
         display_message(last_word[2], 7 * display_width / 80, 40 * display_width / 80, 40 * display_height / 60, black, font=chosen_font)
         display_message(last_word[3], 7 * display_width / 80, 51.5 * display_width / 80, 40 * display_height / 60, black, font=chosen_font)
         display_message(last_word[4], 7 * display_width / 80, 63 * display_width / 80, 40 * display_height / 60, black, font=chosen_font)
+
+        button("click here for surprise!", white, 40*display_width/80, 15*display_height/60, 40*display_width/80, 4*display_height/60, black, border_radius=5*display_height/60, border=1, border_color=white, border_width=5*display_width/800, font=chosen_font)
+        ListOfButtons.append(button_data("surprise", 40*display_width/80, 15*display_height/60, 40*display_width/80, 4*display_height/60))
+
+        #print(ListOfButtons)
+        if mouse_pressed and ((ListOfButtons[0][1] <= mouse_x) and (mouse_x <= ListOfButtons[0][3]) and (ListOfButtons[0][2] <= mouse_y) and (mouse_y <= ListOfButtons[0][4])):
+            display_message("calculating...", display_height/15, display_width/2, display_height/3, white)
+
+
 
         if mouse_pressed:
             display_message("Mouse Down", display_height/15, display_width/2, display_height/2, white)
