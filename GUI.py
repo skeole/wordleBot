@@ -19,7 +19,7 @@ pygame.display.set_caption("Wordle Bot")
 #Table: https://www.rapidtables.com/web/color/RGB_Color.html
 
 black = (0, 0, 0)
-white = (255, 255, 255)
+white = (234, 234, 234)
 gray = (128, 128, 128)
 
 red = (255, 0, 0)
@@ -27,8 +27,8 @@ green = (0, 255, 0)
 blue = (0, 0, 255)
 
 orange = (255, 128, 0)
-yellow = (255, 255, 0)
-lime = (128, 255, 0)
+yellow = (153, 153, 0)
+lime = (76, 153, 0)
 
 clock = pygame.time.Clock()
 
@@ -79,9 +79,13 @@ def game_loop():
     chosen_font = "verdana"
         #must be from ["optima", "georgia", "keyboard", "verdana",
     #                   "arial", "futura", "comicsans", "gillsans"]
+    list_of_squares = [0, 0, 0, 0, 0]
+    list_of_colors = [gray, yellow, lime]
     while run:
 
         ListOfButtons = []
+
+        mouse_clicked = False
 
         for event in pygame.event.get(): #basically go over every event
                         #this includes, but is not limited to: change in mouse position,
@@ -90,6 +94,7 @@ def game_loop():
                 run = False
 
             if event.type == pygame.MOUSEBUTTONDOWN:
+                mouse_clicked = True
                 mouse_pressed = True
             if event.type == pygame.MOUSEBUTTONUP:
                 mouse_pressed = False
@@ -99,24 +104,43 @@ def game_loop():
         #print(mouse_x, mouse_y)
         gameDisplay.fill(black) #sets the background to white = (255, 255, 255)
 
-        draw_centered_rectangle(17*display_width/80, 40*display_height/60, 8*display_width/80, 8*display_height/60, white, border_radius=display_height/80)
-        draw_centered_rectangle(28.5*display_width/80, 40*display_height/60, 8*display_width/80, 8*display_height/60, white, border_radius=display_height/80)
-        draw_centered_rectangle(40*display_width/80, 40*display_height/60, 8*display_width/80, 8*display_height/60, white, border_radius=display_height/80)
-        draw_centered_rectangle(51.5*display_width/80, 40*display_height/60, 8*display_width/80, 8*display_height/60, white, border_radius=display_height/80)
-        draw_centered_rectangle(63*display_width/80, 40*display_height/60, 8*display_width/80, 8*display_height/60, white, border_radius=display_height/80)
-
-        display_message(last_word[0], 7*display_width/80, 17*display_width/80, 40*display_height/60, black, font=chosen_font)
-        display_message(last_word[1], 7 * display_width / 80, 28.5 * display_width / 80, 40 * display_height / 60, black, font=chosen_font)
-        display_message(last_word[2], 7 * display_width / 80, 40 * display_width / 80, 40 * display_height / 60, black, font=chosen_font)
-        display_message(last_word[3], 7 * display_width / 80, 51.5 * display_width / 80, 40 * display_height / 60, black, font=chosen_font)
-        display_message(last_word[4], 7 * display_width / 80, 63 * display_width / 80, 40 * display_height / 60, black, font=chosen_font)
-
         button("click here for surprise!", white, 40*display_width/80, 15*display_height/60, 40*display_width/80, 4*display_height/60, black, border_radius=5*display_height/60, border=1, border_color=white, border_width=5*display_width/800, font=chosen_font)
         ListOfButtons.append(button_data("surprise", 40*display_width/80, 15*display_height/60, 40*display_width/80, 4*display_height/60))
 
-        #print(ListOfButtons)
+        button(last_word[0], white, 17*display_width/80, 40*display_height/60, 8*display_width/80, 8*display_height/60, list_of_colors[list_of_squares[0]], font=chosen_font)
+        ListOfButtons.append(button_data("letter 1", 17*display_width/80, 40*display_height/60, 8*display_width/80, 8*display_height/60))
+
+        button(last_word[1], white, 28.5*display_width/80, 40*display_height/60, 8*display_width/80, 8*display_height/60, list_of_colors[list_of_squares[1]], font=chosen_font)
+        ListOfButtons.append(button_data("letter 2", 28.5*display_width/80, 40*display_height/60, 8*display_width/80, 8*display_height/60))
+
+        button(last_word[2], white, 40*display_width/80, 40*display_height/60, 8*display_width/80, 8*display_height/60, list_of_colors[list_of_squares[2]], font=chosen_font)
+        ListOfButtons.append(button_data("letter 3", 40*display_width/80, 40*display_height/60, 8*display_width/80, 8*display_height/60))
+
+        button(last_word[3], white, 51.5*display_width/80, 40*display_height/60, 8*display_width/80, 8*display_height/60, list_of_colors[list_of_squares[3]], font=chosen_font)
+        ListOfButtons.append(button_data("letter 4", 51.5*display_width/80, 40*display_height/60, 8*display_width/80, 8*display_height/60))
+
+        button(last_word[4], white, 63*display_width/80, 40*display_height/60, 8*display_width/80, 8*display_height/60, list_of_colors[list_of_squares[4]], font=chosen_font)
+        ListOfButtons.append(button_data("letter 5", 63*display_width/80, 40*display_height/60, 8*display_width/80, 8*display_height/60))
+
+        print(mouse_x, mouse_y)
+        print(ListOfButtons)
         if mouse_pressed and ((ListOfButtons[0][1] <= mouse_x) and (mouse_x <= ListOfButtons[0][3]) and (ListOfButtons[0][2] <= mouse_y) and (mouse_y <= ListOfButtons[0][4])):
             display_message("calculating...", display_height/15, display_width/2, display_height/3, white)
+        if mouse_clicked and ((ListOfButtons[1][1] <= mouse_x) and (mouse_x <= ListOfButtons[1][3]) and (ListOfButtons[1][2] <= mouse_y) and (mouse_y <= ListOfButtons[1][4])):
+            list_of_squares[0] += 1
+            list_of_squares[0] = (list_of_squares[0] % 3)
+        if mouse_clicked and ((ListOfButtons[2][1] <= mouse_x) and (mouse_x <= ListOfButtons[2][3]) and (ListOfButtons[2][2] <= mouse_y) and (mouse_y <= ListOfButtons[2][4])):
+            list_of_squares[1] += 1
+            list_of_squares[1] = (list_of_squares[1] % 3)
+        if mouse_clicked and ((ListOfButtons[3][1] <= mouse_x) and (mouse_x <= ListOfButtons[3][3]) and (ListOfButtons[3][2] <= mouse_y) and (mouse_y <= ListOfButtons[3][4])):
+            list_of_squares[2] += 1
+            list_of_squares[2] = (list_of_squares[2] % 3)
+        if mouse_clicked and ((ListOfButtons[4][1] <= mouse_x) and (mouse_x <= ListOfButtons[4][3]) and (ListOfButtons[4][2] <= mouse_y) and (mouse_y <= ListOfButtons[4][4])):
+            list_of_squares[3] += 1
+            list_of_squares[3] = (list_of_squares[3] % 3)
+        if mouse_clicked and ((ListOfButtons[5][1] <= mouse_x) and (mouse_x <= ListOfButtons[5][3]) and (ListOfButtons[5][2] <= mouse_y) and (mouse_y <= ListOfButtons[5][4])):
+            list_of_squares[4] += 1
+            list_of_squares[4] = (list_of_squares[4] % 3)
 
 
 
