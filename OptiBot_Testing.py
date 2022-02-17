@@ -164,4 +164,10 @@ adieu:
     number of words that require 4.5 or 5 guesses: 212
     number of words that require more than 5: none
     average amount of time spent per word: 1 to 2 seconds
+
+crate:
+    average amount of guesses: 3.53304535637149
+    number of words that require 4.5 or 5 guesses: 92
+    number of words that require more than 5: none
+    average amount of time spent per word: <1 second
 '''
