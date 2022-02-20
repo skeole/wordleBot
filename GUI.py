@@ -1,5 +1,25 @@
 import pygame
 import time
+import json
+
+ListOfGuesses = []
+with open("Word_Data/wordle_accepted_answers.json") as fileInput:
+    ListOfWords = json.load(fileInput) #accepted answers
+with open("Word_Data/wordle_accepted_guesses.json") as fileInput:
+    ListOfGuesses = json.load(fileInput) #accepted guesses
+ListOfNextGuesses = []
+with open("cheat.txt") as fileInput:
+    file = list(fileInput)
+first_guess = ""
+for line in file:
+    C = line.strip()
+    C = C.split()
+    if first_guess == "":
+        first_guess = C[0]
+    else:
+        ListOfNextGuesses.append([C[1], C[2]])
+for i in ListOfWords:
+    ListOfGuesses.append(i)
 
 pygame.init()
 
@@ -31,8 +51,6 @@ yellow = (153, 153, 0)
 lime = (76, 153, 0)
 
 clock = pygame.time.Clock()
-
-ListOfButtons = []
 
 def text_objects(text, font, color):
     textSurface = font.render(text, True, color) #what the thing renders as
@@ -67,15 +85,100 @@ def button(message, text_color, x, y, width, height, color, surface=gameDisplay,
 def button_data(message, x, y, width, height):
     return [message, x-width/2, y-height/2, x+width/2, y+height/2]
 
+def words_that_fit(word, answers, yellows, greens): #grays, greens, yellows = positions
+    grays = []
+    for i in range(1, 6):
+        if (i not in yellows) and (i not in greens):
+            grays.append(i)
+    words_that_fit = []
+    for i in answers:
+        temp = True
+        temp2 = list(i)
+        for j in greens:
+            if temp:
+                temp = (word[j-1] == temp2[j-1]) #we need all the greens to match
+                temp2[j-1] = 0 #now we remove the letter from the answer for yellows and grays
+        for j in yellows:
+            if temp:
+                temp = (word[j-1] in temp2) and (word[j-1] != temp2[j-1])
+                #we need the yellows to be in the word but also in a different position
+                if temp:
+                    temp2[temp2.index(word[j-1])] = 0 #now we remove the letter
+        for j in grays:
+            if temp:
+                temp = (word[j-1] not in temp2)
+        if temp:
+            words_that_fit.append(i)
+    return words_that_fit
+
+def find_yellow_green(guess, target):
+    r = list(target)
+    Green = []
+    Yellow = []
+    for i in range(5):
+        if guess[i] == r[i]:
+            r[i] = 0
+            Green.append(i+1)
+    for i in range(5):
+        if (guess[i] in r) and ((i+1) not in Green):
+            r[r.index(guess[i])] = 0
+            Yellow.append(i+1)
+    return [Yellow, Green]
+
+def find_optimized_word(ListOfAllGuesses, ListOfAllWords):
+    min = 10000
+    min2 = 10000
+    bestWord = ""
+    for i in ListOfAllGuesses: #go over every possible guess
+        temp = 0
+        temp3 = 0
+        for j in ListOfAllWords: #go over all the remaining words
+            temp2 = find_yellow_green(i, j)
+            yellow = temp2[0]
+            green = temp2[1]
+            c = len(words_that_fit(i, ListOfAllWords, yellow, green))
+            temp = max(temp, c) #nash equilib
+            temp3 += c * c
+        if ((temp == min) and (temp3 < min2)) or (temp < min):
+            min = temp
+            min2 = temp3
+            bestWord = i
+    return bestWord, min, min2
+
+def decode_yellow_green(yellows, greens):
+    s = 0
+    for i in range(1, 6):
+        if i in yellows:
+            s += 3**(i-1)
+        if i in greens:
+            s += 2 * (3**(i-1))
+    return s
+
+def calculate_optimized_word(last_word, yellows, greens, answers):
+    if len(answers) == 1:
+        return answers[0]
+    elif len(answers) == 2:
+        return answers[0]# + " " + words_remaining[1]
+    elif last_word.lower() == first_guess:
+        return ListOfNextGuesses[decode_yellow_green(yellows, greens)][0]
+    else:
+        return find_optimized_word(ListOfGuesses, answers)[0]
+
 def game_loop():
     run = True
+
+    list_of_words = ListOfWords
 
     mouse_pressed = False
 
     mouse_x = 0
     mouse_y = 0
 
-    last_word = "RAISE"
+    mouse_ticks = 0
+    calculating_on = False
+
+    last_word = first_guess.upper()
+    words_remaining = ListOfWords
     chosen_font = "verdana"
         #must be from ["optima", "georgia", "keyboard", "verdana",
     #                   "arial", "futura", "comicsans", "gillsans"]
@@ -83,9 +186,12 @@ def game_loop():
     list_of_colors = [gray, yellow, lime]
     while run:
 
+        reset = False
+
         ListOfButtons = []
 
         mouse_clicked = False
+        mouse_released = False
 
         for event in pygame.event.get(): #basically go over every event
                         #this includes, but is not limited to: change in mouse position,
@@ -96,16 +202,20 @@ def game_loop():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 mouse_clicked = True
                 mouse_pressed = True
+                mouse_ticks += 1
+
             if event.type == pygame.MOUSEBUTTONUP:
+                mouse_released = True
                 mouse_pressed = False
+                mouse_ticks += 1
             #print(event)
 
         mouse_x, mouse_y = pygame.mouse.get_pos()
         #print(mouse_x, mouse_y)
         gameDisplay.fill(black) #sets the background to white = (255, 255, 255)
 
-        button("click here for surprise!", white, 40*display_width/80, 15*display_height/60, 40*display_width/80, 4*display_height/60, black, border_radius=5*display_height/60, border=1, border_color=white, border_width=5*display_width/800, font=chosen_font)
-        ListOfButtons.append(button_data("surprise", 40*display_width/80, 15*display_height/60, 40*display_width/80, 4*display_height/60))
+        button("calculate best word", white, 40*display_width/80, 15*display_height/60, 40*display_width/80, 4*display_height/60, black, border_radius=5*display_height/60, border=1, border_color=white, border_width=5*display_width/800, font=chosen_font)
+        ListOfButtons.append(button_data("calculate best word", 40*display_width/80, 15*display_height/60, 40*display_width/80, 4*display_height/60))
 
         button(last_word[0], white, 17*display_width/80, 40*display_height/60, 8*display_width/80, 8*display_height/60, list_of_colors[list_of_squares[0]], font=chosen_font)
         ListOfButtons.append(button_data("letter 1", 17*display_width/80, 40*display_height/60, 8*display_width/80, 8*display_height/60))
@@ -122,10 +232,14 @@ def game_loop():
         button(last_word[4], white, 63*display_width/80, 40*display_height/60, 8*display_width/80, 8*display_height/60, list_of_colors[list_of_squares[4]], font=chosen_font)
         ListOfButtons.append(button_data("letter 5", 63*display_width/80, 40*display_height/60, 8*display_width/80, 8*display_height/60))
 
-        print(mouse_x, mouse_y)
-        print(ListOfButtons)
-        if mouse_pressed and ((ListOfButtons[0][1] <= mouse_x) and (mouse_x <= ListOfButtons[0][3]) and (ListOfButtons[0][2] <= mouse_y) and (mouse_y <= ListOfButtons[0][4])):
-            display_message("calculating...", display_height/15, display_width/2, display_height/3, white)
+        button("reset", white, 40*display_width/80, 6*display_height/60, 40*display_width/80, 4*display_height/60, black, border_radius=5*display_height/60, border=1, border_color=white, border_width=5*display_width/800, font=chosen_font)
+        ListOfButtons.append(button_data("reset", 40*display_width/80, 6*display_height/60, 40*display_width/80, 4*display_height/60))
+
+        #print(mouse_x, mouse_y)
+        #print(ListOfButtons)
+        if (ListOfButtons[0][1] <= mouse_x) and (mouse_x <= ListOfButtons[0][3]) and (ListOfButtons[0][2] <= mouse_y) and (mouse_y <= ListOfButtons[0][4]):
+            if mouse_clicked:
+                calculating_on = True
         if mouse_clicked and ((ListOfButtons[1][1] <= mouse_x) and (mouse_x <= ListOfButtons[1][3]) and (ListOfButtons[1][2] <= mouse_y) and (mouse_y <= ListOfButtons[1][4])):
             list_of_squares[0] += 1
             list_of_squares[0] = (list_of_squares[0] % 3)
@@ -141,17 +255,35 @@ def game_loop():
         if mouse_clicked and ((ListOfButtons[5][1] <= mouse_x) and (mouse_x <= ListOfButtons[5][3]) and (ListOfButtons[5][2] <= mouse_y) and (mouse_y <= ListOfButtons[5][4])):
             list_of_squares[4] += 1
             list_of_squares[4] = (list_of_squares[4] % 3)
+        if mouse_clicked and ((ListOfButtons[6][1] <= mouse_x) and (mouse_x <= ListOfButtons[6][3]) and (ListOfButtons[6][2] <= mouse_y) and (mouse_y <= ListOfButtons[6][4])):
+            reset = True
 
-
-
-        if mouse_pressed:
-            display_message("Mouse Down", display_height/15, display_width/2, display_height/2, white)
-        else:
-            display_message("Mouse Up", display_height/15, display_width/2, display_height/2, white)
-
+        if calculating_on:
+            display_message("calculating...", display_height/15, display_width/2, display_height/3, white)
 
         pygame.display.update() #the graphics all refresh
         clock.tick(20) #20 FPS
+        if calculating_on:
+            yellows = []
+            greens = []
+            for i in range(len(list_of_squares)):
+                if list_of_squares[i] == 1:
+                    yellows.append(i+1)
+                elif list_of_squares[i] == 2:
+                    greens.append(i+1)
+            words_remaining = words_that_fit(last_word.lower(), words_remaining, yellows, greens)
+            last_word = calculate_optimized_word(last_word, yellows, greens, words_remaining).upper()
+            list_of_squares = [0, 0, 0, 0, 0]
+            print(last_word)
+            calculating_on = False
+
+        if reset:
+            last_word = first_guess.upper()
+            words_remaining = ListOfWords
+            calculating_on = False
+            list_of_squares = [0, 0, 0, 0, 0]
+
+
 
 
 game_loop()
