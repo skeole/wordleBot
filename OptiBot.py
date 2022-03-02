@@ -111,6 +111,8 @@ while run:
 
     ListOfWords = wordsThatFit(lastword, ListOfWords, Yellow, Green)
 
+    print(ListOfWords)
+
     if len(ListOfWords) == 1:
         print("the word is " + ListOfWords[0])
         run = False

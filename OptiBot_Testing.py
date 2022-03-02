@@ -170,4 +170,9 @@ crate:
     number of words that require 4.5 or 5 guesses: 92
     number of words that require more than 5: none
     average amount of time spent per word: <1 second
+
+words to try that have the same letters: trace, slate, arise, least
+that don't: slane, crane, slant, oater/orate, carte, tears/stare/tares/reast, carle, carte, torse
+
+for fun: qajaq, jazzy, xylyl, pzazz, slyly, susus, yukky, mamma, jaffa
 '''
