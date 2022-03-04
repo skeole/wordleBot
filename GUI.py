@@ -8,7 +8,7 @@ with open("Word_Data/wordle_accepted_answers.json") as fileInput:
 with open("Word_Data/wordle_accepted_guesses.json") as fileInput:
     ListOfGuesses = json.load(fileInput) #accepted guesses
 ListOfNextGuesses = []
-with open("cheat.txt") as fileInput:
+with open("Starting_Word.txt") as fileInput:
     file = list(fileInput)
 first_guess = ""
 for line in file:

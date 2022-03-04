@@ -9,7 +9,7 @@ with open("Word_Data/wordle_accepted_guesses.json") as fileInput:
 
 ListOfNextGuesses = []
 
-with open("cheat.txt") as fileInput:
+with open("Starting_Word.txt") as fileInput:
     file = list(fileInput)
 
 firstguess = ""
@@ -20,7 +20,7 @@ for line in file:
     if firstguess == "":
         firstguess = C[0]
     else:
-        ListOfNextGuesses.append([C[1], C[2]])
+        ListOfNextGuesses.append(C[0])
 
 for i in ListOfWords:
     ListOfGuesses.append(i)
@@ -65,25 +65,32 @@ def findYellowGreen(guess, target):
             Yellow.append(i+1)
     return [Yellow, Green]
 
-def findOptimizedWord(ListOfAllGuesses, ListOfAllWords):
-    min = 10000
-    min2 = 10000
+def divideUpAnswers(ListOfRemainingAnswers, Word):
+    dividedAnswers = [0]*243
+    for i in ListOfRemainingAnswers:
+        dividedAnswers[decodeYellowGreen(findYellowGreen(Word, i)[0], findYellowGreen(Word, i)[1])] += 1
+    return dividedAnswers
+
+def divideList(ListOfRemainingAnswers, Word):
+    dividedAnswers = [0]*243
+    for i in range(len(dividedAnswers)):
+        dividedAnswers[i] = []
+    for i in ListOfRemainingAnswers:
+        dividedAnswers[decodeYellowGreen(findYellowGreen(Word, i)[0], findYellowGreen(Word, i)[1])].append(i)
+    return dividedAnswers
+
+def findOptimizedWord(ListOfAllGuesses, ListOfRemainingAnswers):
+    minimum = 10000
     bestWord = ""
-    for i in ListOfAllGuesses: #go over every possible guess
-        temp = 0
-        temp3 = 0
-        for j in ListOfAllWords: #go over all the remaining words
-            temp2 = findYellowGreen(i, j)
-            yellow = temp2[0]
-            green = temp2[1]
-            c = len(wordsThatFit(i, ListOfAllWords, yellow, green))
-            temp = max(temp, c) #nash equilib
-            temp3 += c * c
-        if ((temp == min) and (temp3 < min2)) or (temp < min):
-            min = temp
-            min2 = temp3
+    #plan: go over all starting words
+    for i in ListOfAllGuesses: #I think this is necessary
+        maximum = 0 #go over the 243 possible groups, see the size of each one
+        for j in divideUpAnswers(ListOfRemainingAnswers, i): #go over all possible green/yellow combos, then take which one gives the nash equilib
+            maximum = max(maximum, j)
+        if (maximum < minimum) or ((maximum == minimum) and (i in ListOfRemainingAnswers)):
+            minimum = maximum
             bestWord = i
-    return bestWord, min, min2
+    return [bestWord, minimum]
 
 def decodeYellowGreen(yellows, greens):
     s = 0
@@ -104,7 +111,10 @@ def findNumGuesses(target, ListOfGuesses, ListOfWords):
     while run:
         numGuesses += 1
         temp0 = findYellowGreen(lastword, target)
-        LOW = wordsThatFit(lastword, LOW, temp0[0], temp0[1])
+        if lastword != firstguess:
+            LOW = wordsThatFit(lastword, LOW, temp0[0], temp0[1])
+        else:
+            LOW = dividedList[decodeYellowGreen(temp0[0], temp0[1])]
 
         if len(LOW) == 1:
             run = False
@@ -112,7 +122,7 @@ def findNumGuesses(target, ListOfGuesses, ListOfWords):
             numGuesses += 0.5
             run = False
         elif lastword == firstguess:
-            lastword = ListOfNextGuesses[decodeYellowGreen(temp0[0], temp0[1])][0]
+            lastword = ListOfNextGuesses[decodeYellowGreen(temp0[0], temp0[1])]
         else:
             lastword = findOptimizedWord(ListOfGuesses, LOW)[0]
         if numGuesses > 10:
@@ -124,6 +134,9 @@ ListOfFailures = []
 ListOfSixes = []
 ListOfFives = []
 
+print(firstguess)
+
+dividedList = divideList(ListOfWords, firstguess)
 for i in tqdm(ListOfWords):
     t = findNumGuesses(i, ListOfGuesses, ListOfWords)
     s += t
@@ -172,7 +185,7 @@ crate:
     average amount of time spent per word: <1 second
 
 words to try that have the same letters: trace, slate, arise, least
-that don't: slane, crane, slant, oater/orate, carte, tears/stare/tares/reast, carle, carte, torse
+that don't: slane, crane, slant, oater/orate, carte, reast/tears/stare/tares/rates, carle, carte, torse
 
 for fun: qajaq, jazzy, xylyl, pzazz, slyly, susus, yukky, mamma, jaffa
 '''

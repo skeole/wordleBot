@@ -1,7 +1,4 @@
 How to add a new word:
 1. Choose what word you're running
-2. Change guess in cheat.py to the word you want
-3. Paste the output into cheat.txt (may take up to an hour to run; i = 0 will take the longest to run by far)
-    Some words already have a file in Word_Data
-4. OptiBot is ready to run :)
-5. Optional: Run OptiBot Testing
+2. Change guess in New_Word.py to the word you want
+3. Wait - will take at least 30 mins, up to 4+ hours depending on what word you chose

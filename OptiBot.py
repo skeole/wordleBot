@@ -9,7 +9,7 @@ with open("Word_Data/wordle_accepted_guesses.json") as fileInput:
 
 ListOfNextGuesses = []
 
-with open("cheat.txt") as fileInput:
+with open("Starting_Word.txt") as fileInput:
     file = list(fileInput)
 
 firstguess = ""
@@ -20,7 +20,7 @@ for line in file:
     if firstguess == "":
         firstguess = C[0]
     else:
-        ListOfNextGuesses.append([C[1], C[2]])
+        ListOfNextGuesses.append(C[1])
 
 for i in ListOfWords:
     ListOfGuesses.append(i)
@@ -65,26 +65,27 @@ def findYellowGreen(guess, target):
             Yellow.append(i+1)
     return [Yellow, Green]
 
-def findOptimizedWord(ListOfAllGuesses, ListOfAllWords):
-    min = 10000
-    min2 = 10000
-    bestWord = ""
-    for i in tqdm(ListOfAllGuesses): #go over every possible guess
-        temp = 0
-        temp3 = 0
-        for j in ListOfAllWords: #go over all the remaining words
-            temp2 = findYellowGreen(i, j)
-            yellow = temp2[0]
-            green = temp2[1]
-            c = len(wordsThatFit(i, ListOfAllWords, yellow, green))
-            temp = max(temp, c) #nash equilib
-            temp3 += c * c
-        if ((temp == min) and (temp3 < min2)) or (temp < min):
-            min = temp
-            min2 = temp3
-            bestWord = i
-    return bestWord, min, min2
+def divideUpAnswers(ListOfRemainingAnswers, Word):
+    dividedAnswers = [0]*243
+    for i in range(len(dividedAnswers)):
+        dividedAnswers[i] = []
+    for i in ListOfRemainingAnswers:
+        dividedAnswers[decodeYellowGreen(findYellowGreen(Word, i)[0], findYellowGreen(Word, i)[1])].append(i) #+= 1
+    return dividedAnswers
 
+def findNashEquilibrium(ListOfAllGuesses, ListOfRemainingAnswers):
+    minimum = 10000
+    bestWord = ""
+    #plan: go over all starting words
+    for i in tqdm(ListOfAllGuesses): #I think this is necessary
+        maximum = 0 #go over the 243 possible groups, see the size of each one
+        for j in divideUpAnswers(ListOfRemainingAnswers, i): #go over all possible green/yellow combos, then take which one gives the nash equilib
+            maximum = max(maximum, len(j))
+        if (maximum < minimum) or ((maximum == minimum) and (i in ListOfRemainingAnswers)):
+            minimum = maximum
+            bestWord = i
+    return [bestWord, minimum]
+  
 def decodeYellowGreen(yellows, greens):
     s = 0
     for i in range(1, 6):
@@ -111,8 +112,6 @@ while run:
 
     ListOfWords = wordsThatFit(lastword, ListOfWords, Yellow, Green)
 
-    print(ListOfWords)
-
     if len(ListOfWords) == 1:
         print("the word is " + ListOfWords[0])
         run = False
@@ -120,12 +119,12 @@ while run:
         print("there are 2 remaining words: \"" + ListOfWords[0] + "\" and \"" + ListOfWords[1] + "\". ")
         run = False
     elif lastword == firstguess:
-        print("next word: \"" + ListOfNextGuesses[decodeYellowGreen(Yellow, Green)][0] +
-              "\". Nash Equilbrium: " + ListOfNextGuesses[decodeYellowGreen(Yellow, Green)][1] +
+        print("next word: \"" + ListOfNextGuesses[decodeYellowGreen(Yellow, Green)] +
+              "\". Nash Equilbrium: " + ListOfNextGuesses[decodeYellowGreen(Yellow, Green)] +
               " words. There are " + str(len(ListOfWords)) + " words left currently. ")
-        lastword = ListOfNextGuesses[decodeYellowGreen(Yellow, Green)][0]
+        lastword = ListOfNextGuesses[decodeYellowGreen(Yellow, Green)]
     else:
-        temp = findOptimizedWord(ListOfGuesses, ListOfWords)
+        temp = findNashEquilibrium(ListOfGuesses, ListOfWords)
         lastword = temp[0]
         print("next word: \"" + lastword + "\". Nash Equilbrium: " + str(temp[1]) +
               " words. There are " + str(len(ListOfWords)) + " words left currently. ")
