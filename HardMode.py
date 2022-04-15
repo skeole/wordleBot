@@ -84,7 +84,7 @@ def decodeYellowGreen(yellows, greens):
         if i in greens:
             s += 2 * (3**(i-1))
     return s
-    
+
 #functions go here
 
 def total_sum_of_lengths(L):
@@ -134,6 +134,7 @@ while run:
         Green.append(int(i))
 
     ListOfWords = wordsThatFit(lastword, ListOfWords, Yellow, Green)
+    ListOfGuesses = wordsThatFit(lastword, ListOfGuesses, Yellow, Green)
 
     if len(ListOfWords) == 1:
         print("the word is " + ListOfWords[0])
@@ -145,7 +146,7 @@ while run:
         if input("do you want to find the best remaining word? ") == "y":
             temp = findNashEquilibrium(ListOfGuesses, ListOfWords, primary, secondary)
             print("Best word: \"" + temp[0] + "\". Score: " + str(temp[1]) +
-                ". There are " + str(len(ListOfWords)) + " words left currently. ")
+                ". There are " + str(len(ListOfWords)) + " words left currentlyeu. ")
             if (len(ListOfWords) < 10):
                 print("They are: " + str(ListOfWords))
         else:

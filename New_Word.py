@@ -70,10 +70,18 @@ def words_that_fit(word, answers, yellows, greens):
             wordsthatfit.append(i)
     return wordsthatfit
 
-def separate_answers_by_yellows_and_greens(ListOfRemainingAnswers, Word):
+def find_number_of_answers_by_yellows_and_greens(ListOfRemainingAnswers, Word):
     dividedAnswers = [0]*243
     for i in ListOfRemainingAnswers:
         dividedAnswers[encode(find_yellows_and_greens(Word, i)[0], find_yellows_and_greens(Word, i)[1])] += 1
+    return dividedAnswers
+
+def separate_answers_by_yellows_and_greens(ListOfRemainingAnswers, Word):
+    dividedAnswers = [0]*243
+    for i in range(len(dividedAnswers)):
+        dividedAnswers[i] = []
+    for i in ListOfRemainingAnswers:
+        dividedAnswers[encode(find_yellows_and_greens(Word, i)[0], find_yellows_and_greens(Word, i)[1])].append(i)
     return dividedAnswers
 
 def find_nash_equilbrium(ListOfAllGuesses, ListOfRemainingAnswers):
@@ -84,7 +92,7 @@ def find_nash_equilbrium(ListOfAllGuesses, ListOfRemainingAnswers):
     for i in ListOfAllGuesses: #I think this is necessary
         maximum = 0 #go over the 243 possible groups, see the size of each one
         temp = 0
-        for j in separate_answers_by_yellows_and_greens(ListOfRemainingAnswers, i): #go over all possible green/yellow combos, then take which one gives the nash equilib
+        for j in find_number_of_answers_by_yellows_and_greens(ListOfRemainingAnswers, i): #go over all possible green/yellow combos, then take which one gives the nash equilib
             maximum = max(maximum, j)
             temp += j*j
         if (maximum < minimum) or ((maximum == minimum) and (temp <= minimum2)):
@@ -119,7 +127,7 @@ def required_number_of_guesses(target, ListOfGuesses, ListOfWords):
         if numGuesses > 10:
             run = False
     return numGuesses
-            
+
 ListOfNextGuesses = []
 
 with open("Starting_Word.txt", "w") as outFile:

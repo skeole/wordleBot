@@ -17,7 +17,7 @@ for line in file:
     if first_guess == "":
         first_guess = C[0]
     else:
-        ListOfNextGuesses.append([C[1], C[2]])
+        ListOfNextGuesses.append(C[0])
 for i in ListOfWords:
     ListOfGuesses.append(i)
 
@@ -160,7 +160,7 @@ def calculate_optimized_word(last_word, yellows, greens, answers):
     elif len(answers) == 2:
         return answers[0]# + " " + words_remaining[1]
     elif last_word.lower() == first_guess:
-        return ListOfNextGuesses[decode_yellow_green(yellows, greens)][0]
+        return ListOfNextGuesses[decode_yellow_green(yellows, greens)]
     else:
         return find_optimized_word(ListOfGuesses, answers)[0]
 

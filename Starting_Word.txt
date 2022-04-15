@@ -1,0 +1,244 @@
+crate
+solid 15
+slink 4
+ulmin 3
+lorry 5
+mucho 1
+ivory 1
+blond 5
+biddy 1
+snoop 2
+sonly 11
+limos 2
+boney 2
+rayon 8
+scram 1
+tonga 1
+rebar 2
+[]
+['croak']
+silky 5
+plush 2
+sheik 2
+dhols 2
+savoy 1
+biddy 1
+winds 3
+['wrack']
+skimp 2
+hoist 6
+hippo 3
+['count', 'clout']
+hoist 3
+['torch']
+['court']
+snout 2
+['truck', 'trick']
+['crust', 'crypt']
+unlit 6
+hwyls 3
+['catch', 'caput']
+parer 2
+['actor']
+['carat']
+welsh 1
+[]
+[]
+shuln 3
+['stack', 'scant']
+['coast', 'chant']
+skimp 1
+[]
+['chart']
+tilde 2
+['track', 'tract']
+['craft']
+spiny 5
+[]
+['cloth']
+boney 2
+[]
+[]
+boozy 1
+[]
+[]
+sappy 3
+[]
+['cacti', 'catty']
+parer 1
+[]
+[]
+[]
+[]
+[]
+['loath', 'swath']
+[]
+[]
+[]
+[]
+[]
+['wrath']
+[]
+[]
+olein 9
+block 2
+liken 1
+solei 16
+dicey 1
+howdy 2
+fiend 2
+['wreck']
+plied 1
+leben 4
+decal 1
+boney 1
+pangs 9
+['racer', 'recap']
+welch 1
+kebab 2
+[]
+['cream', 'creak']
+dilly 2
+ralph 1
+[]
+dilly 2
+['reach']
+[]
+[]
+[]
+[]
+sleet 5
+egret 2
+savoy 1
+tetri 4
+['recut', 'retch']
+[]
+clued 1
+['erect']
+['crest', 'crept']
+splat 3
+['facet', 'eclat']
+welch 1
+talon 3
+[]
+['cater']
+tatty 1
+[]
+[]
+sully 2
+axion 1
+[]
+['heart', 'teary']
+['react']
+[]
+[]
+[]
+[]
+plush 2
+[]
+[]
+['berth']
+[]
+[]
+[]
+[]
+[]
+['delta', 'theta']
+[]
+[]
+['earth']
+[]
+[]
+[]
+[]
+[]
+humph 1
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+loids 7
+penis 2
+honds 1
+sprig 4
+parer 1
+savoy 1
+pound 3
+['price']
+unzip 1
+guild 6
+welsh 1
+ascot 1
+dingo 2
+['farce']
+['carve']
+savoy 1
+[]
+[]
+slink 6
+welch 1
+welsh 1
+glyph 2
+['scare']
+[]
+midge 3
+['grace', 'brace']
+unzip 1
+shuln 2
+['twice']
+['cutie']
+bleep 1
+[]
+[]
+plier 1
+['truce', 'trice']
+[]
+welch 1
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+[]
+kevil 1
+[]
+[]
+['stare']
+[]
+[]
+['trade']
+['trace']
+[]
+ficus 2
+[]
+['chute']
+['route', 'forte']
+[]
+[]
+swami 1
+[]
+[]
+whups 2
+['acute']
+['caste']
+[]
+[]
+[]
+[]
+[]
+[]
+slosh 2
+[]
+[]
+[]
+[]
+[]
+['grate', 'irate']
+[]
+['crate']
