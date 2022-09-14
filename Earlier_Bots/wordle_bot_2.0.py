@@ -1,10 +1,13 @@
 import json
 from tqdm import tqdm as tqdm
 
-with open("../Word_Data/wordle_accepted_answers.json") as fileInput:
+import sys
+sys.path.insert(1, '/Users/shaankeole/Downloads/Coding/wordleBot')
+
+with open("Word_Data/wordle_accepted_answers.json") as fileInput:
     ListOfWords = json.load(fileInput) #accepted answers
 
-with open("../Word_Data/wordle_accepted_guesses.json") as fileInput:
+with open("Word_Data/wordle_accepted_guesses.json") as fileInput:
     ListOfGuesses = json.load(fileInput) #accepted guesses
 
 for i in ListOfWords:

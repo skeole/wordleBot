@@ -146,7 +146,7 @@ while run:
         if input("do you want to find the best remaining word? ") == "y":
             temp = findNashEquilibrium(ListOfGuesses, ListOfWords, primary, secondary)
             print("Best word: \"" + temp[0] + "\". Score: " + str(temp[1]) +
-                ". There are " + str(len(ListOfWords)) + " words left currentlyeu. ")
+                ". There are " + str(len(ListOfWords)) + " words left currently. ")
             if (len(ListOfWords) < 10):
                 print("They are: " + str(ListOfWords))
         else:

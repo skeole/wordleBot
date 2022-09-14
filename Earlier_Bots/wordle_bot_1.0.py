@@ -1,6 +1,9 @@
 import json
 
-with open("../Word_Data/wordle_accepted_answers.json") as fileInput:
+import sys
+sys.path.insert(1, '/Users/shaankeole/Downloads/Coding/wordleBot')
+
+with open("Word_Data/wordle_accepted_answers.json") as fileInput:
     ListOfWords = json.load(fileInput) #accepted answers
 
 def findScore(word, ListOfAllWords, greenweight, yellowweight):
