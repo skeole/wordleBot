@@ -1,4 +1,4 @@
-import json
+import json # best word: roate apparently?
 from tqdm import tqdm as tqdm
 import math
 
@@ -59,22 +59,23 @@ def divideUpAnswers(ListOfRemainingAnswers, Word):
         dividedAnswers[decodeYellowGreen(findYellowGreen(Word, i)[0], findYellowGreen(Word, i)[1])].append(i)
     return dividedAnswers
 
-def findNashEquilibrium(ListOfAllGuesses, ListOfRemainingAnswers, primary_weight, secondary_weight):
+def findNashEquilibrium(ListOfAllGuesses, ListOfRemainingAnswers, primary_weight):
     primary_score = 1000000000
-    secondary_score = 1000000000
-    bestWord = ""
+    bestWords = []
     #plan: go over all starting words
     for i in tqdm(ListOfAllGuesses): #I think this is necessary
         temp = divideUpAnswers(ListOfRemainingAnswers, i)
         temp_score_1 = primary_weight(temp)
-        temp_score_2 = secondary_weight(temp)
-        if (temp_score_1 < primary_score) or ((temp_score_1 == primary_score) and ((temp_score_2 < secondary_score) or (i in ListOfRemainingAnswers))):
+        if (temp_score_1 < primary_score):
             primary_score = temp_score_1
-            secondary_score = temp_score_2
-            bestWord = i
-            if (i in ListOfRemainingAnswers):
-                secondary_score = 0
-    return [bestWord, abs(primary_score)]
+            bestWords = [i]
+        elif (temp_score_1 == primary_score):
+            bestWords.append(i)
+    if len(bestWords) > 20:
+        for i in range(len(bestWords) - 1, -1, -1):
+            if bestWords[i] not in ListOfRemainingAnswers:
+                bestWords.pop(i)
+    return [bestWords, abs(primary_score)]
   
 def decodeYellowGreen(yellows, greens):
     s = 0
@@ -116,7 +117,6 @@ def squared_sum(list_of_numbers):
     return temp
 
 primary = squared_sum
-secondary = maximum
 
 lastword = input("what's your first guess: ")
 print("starting word: \"" + lastword + "\"")
@@ -143,8 +143,8 @@ while run:
         run = False
     else:
         if input("do you want to find the best remaining word? ") == "y":
-            temp = findNashEquilibrium(ListOfGuesses, ListOfWords, primary, secondary)
-            print("Best word: \"" + temp[0] + "\". Score: " + str(temp[1]) +
+            temp = findNashEquilibrium(ListOfGuesses, ListOfWords, primary)
+            print("Best word: \"" + str(temp[0]) + "\". Score: " + str(temp[1]) +
                 ". There are " + str(len(ListOfWords)) + " words left currently. ")
             if (len(ListOfWords) < 10):
                 print("They are: " + str(ListOfWords))
